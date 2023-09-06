@@ -1,2 +1,2 @@
 # pysialg
-classic swarm intelligence algorithm implemented in Python
+classic swarm intelligence algorithms implemented in Python
