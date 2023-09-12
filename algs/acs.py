@@ -2,17 +2,30 @@
 """
 from tools.debug import DEBUG
 from random import seed, random, randrange
+from math import sqrt
 
 class DirectedWeightedGraph:
     def __init__(
             self,
-            graph:list[list[float]]
+            data:list[list[float]],
+            points2matrix:bool = False
         ) -> None:
-        self.numOfCites = len(graph)
-        self.distance = [[graph[i][j] for j in range(self.numOfCites)] for i in range(self.numOfCites)]
+        """input distance matrix or points matrix
+        """
+        self.numOfCites = len(data)
+        self.distance:list[list[float]] = None
         self.pheromone:list[list[float]] = None
+        if points2matrix:
+            # input points' coordinates
+            self.distance = [[0 for _ in range(self.numOfCites)] for _ in range(self.numOfCites)]
+            for src in range(self.numOfCites):
+                for dst in range(self.numOfCites):
+                    self.distance[src][dst] = sqrt((data[src][0] - data[dst][0]) ** 2 + (data[src][1] - data[dst][1]) ** 2)
+        else:
+            # input distance matrix
+            self.distance = [[data[i][j] for j in range(self.numOfCites)] for i in range(self.numOfCites)]
 
-class Ant:
+class _Ant:
     def __init__(self) -> None:
         self.toBeVisted:set[int] = set()
         self.tour:list[int] = []
@@ -82,7 +95,7 @@ class AntColonySystem:
         self.g = graph
         # ants colony
         self.numberOfAnts = numberOfAnts
-        self.ants = [Ant() for _ in range(self.numberOfAnts)]
+        self.ants = [_Ant() for _ in range(self.numberOfAnts)]
         # parameter
         self.beta = beta
         self.q0 = q0
@@ -188,6 +201,6 @@ class AntColonySystem:
         """print the best tour and its length
         """
         for i in self.gBestTour:
-            print(i, end=" -> ")
+            print(i + 1, end=" -> ")
         print()
         print(f"length: {self.gBestLength}")

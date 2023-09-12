@@ -1,13 +1,11 @@
-from random import random, seed
+from algs.acs import AntColonySystem
+from tools.debug import DEBUG
+from tests.acstest import tsp
+from os import times
 
 if __name__ == "__main__":
-    # a = [[ _ + j for j in range(4)] for _ in range(3)]
-    # print(a)
-    # print(len(a))
-    t = 5
-    for i in range(5):
-        t += i
-        if t > 10:
-            print(t)
-            break
-        print(i)
+    DEBUG.ON = True
+    solver = AntColonySystem(
+        tsp[2], maxGeneration = 2000
+    )
+    solver.run()
