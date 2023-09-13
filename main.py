@@ -1,11 +1,11 @@
-from algs.acs import AntColonySystem
+from algs.acs import AntColonySystem, DirectedWeightedGraph
 from tools.debug import DEBUG
-from tests.acstest import tsp
-from os import times
+from tests.tsp import tsp
+from time import time
 
 if __name__ == "__main__":
     DEBUG.ON = True
     solver = AntColonySystem(
-        tsp[2], maxGeneration = 2000
+        DirectedWeightedGraph(tsp[2]), maxGeneration=500, rdSeed=time()
     )
     solver.run()
