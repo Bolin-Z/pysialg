@@ -6,6 +6,7 @@ from tests.functions import Function
 
 class DifferentialEvolution:
     def run(self):
+        DEBUG.PRINT("------- Differential Evolution --------")
         # main loop
         for _ in range(self.maxGeneration):
             # process each solution
@@ -39,6 +40,8 @@ class DifferentialEvolution:
         if DEBUG.ON:
             print(f"Best Val: {self.gBestVal}")
             print(f"Solution: {self.gBest}")
+        
+        DEBUG.PRINT("--------------- Finish ----------------")
 
     def __init__(
             self,

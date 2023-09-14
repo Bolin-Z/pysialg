@@ -31,13 +31,13 @@ class _Ant:
         self.tour:list[int] = []
         self.tourLength:float = 0.0
     
-    def reset(self):
+    def reset(self) -> None:
         self.toBeVisted.clear()
         self.tour.clear()
         self.tourLength:float = 0.0
 
 class AntColonySystem:
-    def run(self):
+    def run(self) -> None:
         # Initialization phase
         self._nearestNeighborHeuristic()
         self.tao0 = 1 / (self.g.numOfCites * self.gBestLength)
@@ -106,7 +106,7 @@ class AntColonySystem:
         self.gBestTour = []
         self.gBestLength = None
 
-    def _pseudoRandomProportionalRule(self, curAnt:int):
+    def _pseudoRandomProportionalRule(self, curAnt:int) -> None:
         ant = self.ants[curAnt]
         curCity = ant.tour[-1]
         q = random()
@@ -140,13 +140,13 @@ class AntColonySystem:
                     ant.toBeVisted.discard(ant.tour[-1])
                     break
 
-    def _localPheromoneUpdateingRule(self):
+    def _localPheromoneUpdateingRule(self) -> None:
         for ant in self.ants:
             srcCity = ant.tour[-2]
             dstCity = ant.tour[-1]
             self.g.pheromone[srcCity][dstCity] = (1 - self.rho) * self.g.pheromone[srcCity][dstCity] + self.rho * self.tao0
 
-    def _globalPheromoneUpdateingRule(self):
+    def _globalPheromoneUpdateingRule(self) -> None:
         bestAntIdx = 0
         # find the best solution in this generation
         for k in range(len(self.ants)):
@@ -162,7 +162,7 @@ class AntColonySystem:
             dst = self.gBestTour[i + 1]
             self.g.pheromone[src][dst] = (1 - self.alpha) * self.g.pheromone[src][dst] + self.alpha * (1 / self.gBestLength)
         
-    def _nearestNeighborHeuristic(self):
+    def _nearestNeighborHeuristic(self) -> None:
         """return the tour length produced by the nearest neighbor heuristic
         """
         visited = []
