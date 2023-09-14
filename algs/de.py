@@ -24,7 +24,8 @@ class DifferentialEvolution:
                 trial[j] = self.x[a][j] + self.F * (self.x[b][d] - self.x[c][d])
                 # tail
                 for d in range(self.dim):
-                    trial[d] = max(self.lb[d], min(trial[d], self.ub[d]))
+                    if trial[d] < self.lb[d] or trial[d] > self.ub[d]:
+                        trial[d] = rand(self.lb[d], self.ub[d])
                 # selection
                 fvalT = self.f(trial)
                 if self.fitter(fvalT, self.fval[i]):
