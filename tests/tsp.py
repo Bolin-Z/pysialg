@@ -1,3 +1,26 @@
+"""test.py data structure and data sets for tsp
+"""
+from math import sqrt
+class DirectedWeightedGraph:
+    def __init__(
+            self,
+            data:list[list[float]],
+            points2matrix:bool = False
+        ) -> None:
+        """input distance matrix or points matrix
+        """
+        self.numOfCites = len(data)
+        self.distance:list[list[float]] = None
+        if points2matrix:
+            # input points' coordinates
+            self.distance = [[0 for _ in range(self.numOfCites)] for _ in range(self.numOfCites)]
+            for src in range(self.numOfCites):
+                for dst in range(self.numOfCites):
+                    self.distance[src][dst] = sqrt((data[src][0] - data[dst][0]) ** 2 + (data[src][1] - data[dst][1]) ** 2)
+        else:
+            # input distance matrix
+            self.distance = [[data[i][j] for j in range(self.numOfCites)] for i in range(self.numOfCites)]
+
 inf = float('inf')
 
 tsp = [

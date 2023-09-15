@@ -1,4 +1,4 @@
-from algs.acs import AntColonySystem, DirectedWeightedGraph
+from algs.acs import AntColonySystem
 from tools.debug import DEBUG
 from time import time
 from tests.tsp import tsp

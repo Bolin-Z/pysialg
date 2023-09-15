@@ -3,27 +3,12 @@
 from tools.debug import DEBUG
 from random import seed, random, randrange
 from math import sqrt
+from tests.tsp import DirectedWeightedGraph
 
-class DirectedWeightedGraph:
-    def __init__(
-            self,
-            data:list[list[float]],
-            points2matrix:bool = False
-        ) -> None:
-        """input distance matrix or points matrix
-        """
-        self.numOfCites = len(data)
-        self.distance:list[list[float]] = None
+class GraphWithPheromone(DirectedWeightedGraph):
+    def __init__(self, data: list[list[float]], points2matrix: bool = False) -> None:
+        super().__init__(data, points2matrix)
         self.pheromone:list[list[float]] = None
-        if points2matrix:
-            # input points' coordinates
-            self.distance = [[0 for _ in range(self.numOfCites)] for _ in range(self.numOfCites)]
-            for src in range(self.numOfCites):
-                for dst in range(self.numOfCites):
-                    self.distance[src][dst] = sqrt((data[src][0] - data[dst][0]) ** 2 + (data[src][1] - data[dst][1]) ** 2)
-        else:
-            # input distance matrix
-            self.distance = [[data[i][j] for j in range(self.numOfCites)] for i in range(self.numOfCites)]
 
 class _Ant:
     def __init__(self) -> None:
@@ -77,7 +62,7 @@ class AntColonySystem:
 
     def __init__(
             self,
-            graph:DirectedWeightedGraph,
+            graph:GraphWithPheromone,
             maxGeneration:int = 1000,
             numberOfAnts:int = 10,
             beta:int = 2,
