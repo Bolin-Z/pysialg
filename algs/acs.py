@@ -5,9 +5,10 @@ from random import seed, random, randrange
 from math import sqrt
 from tests.tsp import DirectedWeightedGraph
 
-class GraphWithPheromone(DirectedWeightedGraph):
-    def __init__(self, data: list[list[float]], points2matrix: bool = False) -> None:
-        super().__init__(data, points2matrix)
+class _GraphWithPheromone:
+    def __init__(self, dwg:DirectedWeightedGraph) -> None:
+        self.distance = dwg.distance
+        self.numOfCities = dwg.numOfCities
         self.pheromone:list[list[float]] = None
 
 class _Ant:
@@ -23,23 +24,23 @@ class _Ant:
 
 class AntColonySystem:
     def run(self) -> None:
-        # Initialization phase
+        # initialization phase
         self._nearestNeighborHeuristic()
-        self.tao0 = 1 / (self.g.numOfCites * self.gBestLength)
-        self.g.pheromone = [[self.tao0 for _ in range(self.g.numOfCites)] for _ in range(self.g.numOfCites)]
+        self.tao0 = 1 / (self.g.numOfCities * self.gBestLength)
+        self.g.pheromone = [[self.tao0 for _ in range(self.g.numOfCities)] for _ in range(self.g.numOfCities)]
         
         # main loop
         for _ in range(self.maxGeneration):
             # reset the state of ants
             for k in range(self.numberOfAnts):
-                for c in range(self.g.numOfCites):
+                for c in range(self.g.numOfCities):
                     self.ants[k].toBeVisted.add(c)
             # select a starting city for ant k
             for k in range(self.numberOfAnts):
-                self.ants[k].tour.append(randrange(0, self.g.numOfCites))
+                self.ants[k].tour.append(randrange(0, self.g.numOfCities))
                 self.ants[k].toBeVisted.discard(self.ants[k].tour[0])
             # build tours
-            for _ in range(self.g.numOfCites - 1):
+            for _ in range(self.g.numOfCities - 1):
                 for k in range(self.numberOfAnts):
                     self._pseudoRandomProportionalRule(k)
                 # local pheromone updating
@@ -62,7 +63,7 @@ class AntColonySystem:
 
     def __init__(
             self,
-            graph:GraphWithPheromone,
+            graph:DirectedWeightedGraph,
             maxGeneration:int = 1000,
             numberOfAnts:int = 10,
             beta:int = 2,
@@ -77,7 +78,7 @@ class AntColonySystem:
         # termination condition
         self.maxGeneration = maxGeneration
         # problem defined
-        self.g = graph
+        self.g = _GraphWithPheromone(graph)
         # ants colony
         self.numberOfAnts = numberOfAnts
         self.ants = [_Ant() for _ in range(self.numberOfAnts)]
@@ -151,9 +152,9 @@ class AntColonySystem:
         """return the tour length produced by the nearest neighbor heuristic
         """
         visited = []
-        unvisited = {c for c in range(self.g.numOfCites)}
+        unvisited = {c for c in range(self.g.numOfCities)}
 
-        visited.append(randrange(0, self.g.numOfCites))
+        visited.append(randrange(0, self.g.numOfCities))
         unvisited.discard(visited[0])
         tourLength = 0.0
         while len(unvisited) != 0:
@@ -176,7 +177,7 @@ class AntColonySystem:
 
         self.gBestTour = [c for c in visited]
         self.gBestLength = tourLength
-        
+    
         if DEBUG.ON:
             print("--- Greedy Heuristic ---")
             self.printResult()
@@ -185,7 +186,9 @@ class AntColonySystem:
     def printResult(self) -> None:
         """print the best tour and its length
         """
-        for i in self.gBestTour:
-            print(i + 1, end=" -> ")
-        print()
+        for i in range(len(self.gBestTour)):
+            if i == len(self.gBestTour) - 1:
+                print(self.gBestTour[0] + 1)
+            else:
+                print(self.gBestTour[i] + 1, end=" -> ")
         print(f"length: {self.gBestLength}")

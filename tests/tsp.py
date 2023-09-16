@@ -9,17 +9,17 @@ class DirectedWeightedGraph:
         ) -> None:
         """input distance matrix or points matrix
         """
-        self.numOfCites = len(data)
+        self.numOfCities = len(data)
         self.distance:list[list[float]] = None
         if points2matrix:
             # input points' coordinates
-            self.distance = [[0 for _ in range(self.numOfCites)] for _ in range(self.numOfCites)]
-            for src in range(self.numOfCites):
-                for dst in range(self.numOfCites):
+            self.distance = [[0 for _ in range(self.numOfCities)] for _ in range(self.numOfCities)]
+            for src in range(self.numOfCities):
+                for dst in range(self.numOfCities):
                     self.distance[src][dst] = sqrt((data[src][0] - data[dst][0]) ** 2 + (data[src][1] - data[dst][1]) ** 2)
         else:
             # input distance matrix
-            self.distance = [[data[i][j] for j in range(self.numOfCites)] for i in range(self.numOfCites)]
+            self.distance = [[data[i][j] for j in range(self.numOfCities)] for i in range(self.numOfCities)]
 
 inf = float('inf')
 
