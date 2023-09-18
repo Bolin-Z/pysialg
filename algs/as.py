@@ -1,2 +1,0 @@
-"""as.py Ant System
-"""
